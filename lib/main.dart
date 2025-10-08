@@ -14,8 +14,11 @@ import 'package:asesmen_paud/pages/series_photos/create_series_photo_page.dart';
 import 'package:asesmen_paud/pages/series_photos/series_photo_page.dart';
 import 'package:asesmen_paud/pages/students/create_student_page.dart';
 import 'package:asesmen_paud/pages/students/students_page.dart';
+import 'package:asesmen_paud/presentation/bindings/sign_in_binding.dart';
+import 'package:asesmen_paud/presentation/pages/sign_in_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:get/get.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
 void main() async {
@@ -28,8 +31,8 @@ void main() async {
   runApp(const MyApp());
 }
 
-final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey =
-    GlobalKey<ScaffoldMessengerState>();
+// final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey =
+//     GlobalKey<ScaffoldMessengerState>();
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -45,43 +48,53 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      scaffoldMessengerKey: scaffoldMessengerKey,
+    return GetMaterialApp(
       initialRoute: '/',
-      routes: {
-        '/': (context) => FutureBuilder<bool>(
-            future: _checkToken(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Scaffold(
-                  body: Center(
-                    child: CircularProgressIndicator(),
-                  ),
-                );
-              }
+      getPages: [
+        GetPage(
+          name: '/',
+          page: () => const SignInPage(),
+          binding: SignInBinding(),
+        ),
+        GetPage(
+          name: '/sign-in',
+          page: () => const SignInPage(),
+          binding: SignInBinding(),
+        ),
+      ],
+      // routes: {
+      //   '/': (context) => FutureBuilder<bool>(
+      //     future: _checkToken(),
+      //     builder: (context, snapshot) {
+      //       if (snapshot.connectionState == ConnectionState.waiting) {
+      //         return const Scaffold(
+      //           body: Center(child: CircularProgressIndicator()),
+      //         );
+      //       }
 
-              if (snapshot.hasData && snapshot.data == true) {
-                return const DashboardPage();
-              } else {
-                return const LoginPage();
-              }
-            }),
-        '/dashboard': (context) => const DashboardPage(),
-        '/login': (context) => const LoginPage(),
-        '/students': (context) => const StudentsPage(),
-        '/create-student': (context) => const CreateStudentPage(),
-        '/anecdotals': (context) => const AnecdotalsPage(),
-        '/create-anecdotal': (context) => const CreateAnecdotalPage(),
-        '/artworks': (context) => const ArtworksPage(),
-        '/create-artwork': (context) => const CreateArtworkPage(),
-        '/checklists': (context) => const ChecklistsPage(),
-        '/create-checklist': (context) => const CreateChecklistPage(),
-        '/series-photos': (context) => const SeriesPhotosPage(),
-        '/create-series-photo': (context) => const CreateSeriesPhotoPage(),
-        '/reports': (context) => const ReportsPage(),
-        '/create-report': (context) => const CreateReportPage(),
-        '/about': (context) => const AboutPage(),
-      },
+      //       if (snapshot.hasData && snapshot.data == true) {
+      //         return const DashboardPage();
+      //       } else {
+      //         return const LoginPage();
+      //       }
+      //     },
+      //   ),
+      //   '/dashboard': (context) => const DashboardPage(),
+      //   '/login': (context) => const LoginPage(),
+      //   '/students': (context) => const StudentsPage(),
+      //   '/create-student': (context) => const CreateStudentPage(),
+      //   '/anecdotals': (context) => const AnecdotalsPage(),
+      //   '/create-anecdotal': (context) => const CreateAnecdotalPage(),
+      //   '/artworks': (context) => const ArtworksPage(),
+      //   '/create-artwork': (context) => const CreateArtworkPage(),
+      //   '/checklists': (context) => const ChecklistsPage(),
+      //   '/create-checklist': (context) => const CreateChecklistPage(),
+      //   '/series-photos': (context) => const SeriesPhotosPage(),
+      //   '/create-series-photo': (context) => const CreateSeriesPhotoPage(),
+      //   '/reports': (context) => const ReportsPage(),
+      //   '/create-report': (context) => const CreateReportPage(),
+      //   '/about': (context) => const AboutPage(),
+      // },
     );
   }
 }

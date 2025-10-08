@@ -33,8 +33,10 @@ class CreateSeriesPhotoPageState extends State<CreateSeriesPhotoPage> {
   String? _imagesError;
 
   Future<void> _goToLearningGoalSelection() async {
-    final result = await Navigator.push(context,
-        MaterialPageRoute(builder: (context) => const LearningGoalsPage()));
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const LearningGoalsPage()),
+    );
     if (result != null) {
       setState(() {
         learningGoals.add(result);
@@ -44,33 +46,31 @@ class CreateSeriesPhotoPageState extends State<CreateSeriesPhotoPage> {
 
   Future<void> _showDeleteLearningGoalDialog(LearningGoal learningGoal) {
     return showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: const Text('Peringatan'),
-            content: const Text('Yakin ingin hapus capaian pembelajaran?'),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: const Text('Kembali'),
-              ),
-              TextButton(
-                onPressed: () {
-                  setState(() {
-                    learningGoals.remove(learningGoal);
-                  });
-                  Navigator.of(context).pop();
-                },
-                child: const Text(
-                  'Hapus',
-                  style: TextStyle(color: Colors.red),
-                ),
-              ),
-            ],
-          );
-        });
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Peringatan'),
+          content: const Text('Yakin ingin hapus capaian pembelajaran?'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('Kembali'),
+            ),
+            TextButton(
+              onPressed: () {
+                setState(() {
+                  learningGoals.remove(learningGoal);
+                });
+                Navigator.of(context).pop();
+              },
+              child: const Text('Hapus', style: TextStyle(color: Colors.red)),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   bool _validateInputs() {
@@ -132,22 +132,22 @@ class CreateSeriesPhotoPageState extends State<CreateSeriesPhotoPage> {
     }
 
     final dto = CreateSeriesPhotoDto(
-        description: _descriptionController.text,
-        feedback: _feedbackController.text,
-        learningGoals: learningGoals.map((goal) => goal.id as int).toList(),
-        photos: _images);
+      description: _descriptionController.text,
+      feedback: _feedbackController.text,
+      learningGoals: learningGoals.map((goal) => goal.id as int).toList(),
+      photos: _images,
+    );
 
     try {
-      final SuccessResponse<SeriesPhoto> response =
-          await SeriesPhotoService().createSeriesPhoto(studentId, dto);
+      final SuccessResponse<SeriesPhoto> response = await SeriesPhotoService()
+          .createSeriesPhoto(studentId, dto);
 
       if (response.status == 'success') {
         if (!mounted) return;
 
-        scaffoldMessengerKey.currentState?.showSnackBar(ColorSnackbar.build(
-          message: response.message,
-          success: true,
-        ));
+        ScaffoldMessenger.of(context).showSnackBar(
+          ColorSnackbar.build(message: response.message, success: true),
+        );
 
         Navigator.pop(context);
       }
@@ -164,7 +164,8 @@ class CreateSeriesPhotoPageState extends State<CreateSeriesPhotoPage> {
     } catch (e) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-          ColorSnackbar.build(message: e.toString(), success: false));
+        ColorSnackbar.build(message: e.toString(), success: false),
+      );
     } finally {
       setState(() {
         _isLoading = false;
@@ -177,89 +178,76 @@ class CreateSeriesPhotoPageState extends State<CreateSeriesPhotoPage> {
     final int studentId = ModalRoute.of(context)!.settings.arguments as int;
 
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('Buat penilaian foto berseri'),
-        ),
-        body: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                // Description
-                ExpandedTextField(
-                    controller: _descriptionController,
-                    labelText: 'Deskripsi',
-                    errorText: _descriptionError),
-                const SizedBox(
-                  height: 20,
-                ),
+      appBar: AppBar(title: const Text('Buat penilaian foto berseri')),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              // Description
+              ExpandedTextField(
+                controller: _descriptionController,
+                labelText: 'Deskripsi',
+                errorText: _descriptionError,
+              ),
+              const SizedBox(height: 20),
 
-                // Feedback
-                ExpandedTextField(
-                    controller: _feedbackController,
-                    labelText: 'Umpan Balik',
-                    errorText: _feedbackError),
-                const SizedBox(
-                  height: 20,
-                ),
+              // Feedback
+              ExpandedTextField(
+                controller: _feedbackController,
+                labelText: 'Umpan Balik',
+                errorText: _feedbackError,
+              ),
+              const SizedBox(height: 20),
 
-                // Learning Goals
-                const Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    'Capaian Pembelajaran',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w500,
-                      fontSize: 15,
-                    ),
-                  ),
+              // Learning Goals
+              const Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  'Capaian Pembelajaran',
+                  style: TextStyle(fontWeight: FontWeight.w500, fontSize: 15),
                 ),
-                const SizedBox(
-                  height: 5,
-                ),
-                LearningGoalList(
-                  learningGoals: learningGoals,
-                  learningGoalsError: _learningGoalsError,
-                  editing: true,
-                  onAddLearningGoal: _goToLearningGoalSelection,
-                  onDeleteLearningGoal: (goal) =>
-                      _showDeleteLearningGoalDialog(goal),
-                ),
+              ),
+              const SizedBox(height: 5),
+              LearningGoalList(
+                learningGoals: learningGoals,
+                learningGoalsError: _learningGoalsError,
+                editing: true,
+                onAddLearningGoal: _goToLearningGoalSelection,
+                onDeleteLearningGoal: (goal) =>
+                    _showDeleteLearningGoalDialog(goal),
+              ),
 
-                // Photos
-                const Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    'Foto',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w500,
-                      fontSize: 15,
-                    ),
-                  ),
+              // Photos
+              const Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  'Foto',
+                  style: TextStyle(fontWeight: FontWeight.w500, fontSize: 15),
                 ),
-                const SizedBox(
-                  height: 5,
-                ),
-                MultiPhotoManager(
-                  mode: PhotoMode.create,
-                  imageError: _imagesError,
-                  onImagesSelected: (images) {
-                    setState(() {
-                      _images.clear();
-                      _images.addAll(images!);
-                    });
-                  },
-                ),
+              ),
+              const SizedBox(height: 5),
+              MultiPhotoManager(
+                mode: PhotoMode.create,
+                imageError: _imagesError,
+                onImagesSelected: (images) {
+                  setState(() {
+                    _images.clear();
+                    _images.addAll(images!);
+                  });
+                },
+              ),
 
-                SubmitPrimaryButton(
-                  text: 'Simpan',
-                  onPressed: () => _submit(studentId),
-                  isLoading: _isLoading,
-                ),
-              ],
-            ),
+              SubmitPrimaryButton(
+                text: 'Simpan',
+                onPressed: () => _submit(studentId),
+                isLoading: _isLoading,
+              ),
+            ],
           ),
-        ));
+        ),
+      ),
+    );
   }
 }
