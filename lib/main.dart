@@ -1,21 +1,9 @@
-import 'package:asesmen_paud/api/service/auth_service.dart';
-import 'package:asesmen_paud/pages/about_page.dart';
-import 'package:asesmen_paud/pages/anecdotals/anecdotals_page.dart';
-import 'package:asesmen_paud/pages/anecdotals/create_anecdotal_page.dart';
-import 'package:asesmen_paud/pages/artworks/artworks_page.dart';
-import 'package:asesmen_paud/pages/artworks/create_artwork_page.dart';
-import 'package:asesmen_paud/pages/checklists/checklists_page.dart';
-import 'package:asesmen_paud/pages/checklists/create_checklist_page.dart';
 import 'package:asesmen_paud/pages/dashboard_page.dart';
-import 'package:asesmen_paud/pages/login_page.dart';
-import 'package:asesmen_paud/pages/reports/create_report_page.dart';
-import 'package:asesmen_paud/pages/reports/reports_page.dart';
-import 'package:asesmen_paud/pages/series_photos/create_series_photo_page.dart';
-import 'package:asesmen_paud/pages/series_photos/series_photo_page.dart';
-import 'package:asesmen_paud/pages/students/create_student_page.dart';
-import 'package:asesmen_paud/pages/students/students_page.dart';
+import 'package:asesmen_paud/presentation/bindings/dashboard_binding.dart';
+import 'package:asesmen_paud/presentation/bindings/initial_binding.dart';
 import 'package:asesmen_paud/presentation/bindings/sign_in_binding.dart';
 import 'package:asesmen_paud/presentation/pages/sign_in_page.dart';
+import 'package:asesmen_paud/presentation/pages/splash_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
@@ -37,29 +25,23 @@ void main() async {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  Future<bool> _checkToken() async {
-    final token = await AuthService.getToken();
-    if (token != null) {
-      final isValidToken = await AuthService.checkToken(token);
-      return isValidToken;
-    }
-    return false;
-  }
-
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
+      debugShowCheckedModeBanner: false,
+      initialBinding: InitialBinding(),
       initialRoute: '/',
       getPages: [
-        GetPage(
-          name: '/',
-          page: () => const SignInPage(),
-          binding: SignInBinding(),
-        ),
+        GetPage(name: '/', page: () => const SplashPage()),
         GetPage(
           name: '/sign-in',
           page: () => const SignInPage(),
           binding: SignInBinding(),
+        ),
+        GetPage(
+          name: '/dashboard',
+          page: () => const DashboardPage(),
+          binding: DashboardBinding(),
         ),
       ],
       // routes: {

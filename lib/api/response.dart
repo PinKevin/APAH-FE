@@ -12,9 +12,10 @@ class ApiResponse<T> {
   ) {
     if (json['status'] == 'success') {
       return ApiResponse(
-          success: fromJsonT != null
-              ? SuccessResponse.fromJson(json, fromJsonT)
-              : SuccessResponse.fromJsonWithoutPayload(json));
+        success: fromJsonT != null
+            ? SuccessResponse.fromJson(json, fromJsonT)
+            : SuccessResponse.fromJsonWithoutPayload(json),
+      );
     } else {
       return ApiResponse(fail: FailResponse.fromJson(json));
     }
@@ -26,27 +27,27 @@ class SuccessResponse<T> {
   final String message;
   final T? payload;
 
-  SuccessResponse({
-    required this.status,
-    required this.message,
-    this.payload,
-  });
+  SuccessResponse({required this.status, required this.message, this.payload});
 
   factory SuccessResponse.fromJson(
-      Map<String, dynamic> json, T Function(dynamic)? fromJsonT) {
+    Map<String, dynamic> json,
+    T Function(dynamic)? fromJsonT,
+  ) {
     return SuccessResponse(
-        status: json['status'] as String,
-        message: json['message'] as String,
-        payload: json.containsKey('payload') && fromJsonT != null
-            ? fromJsonT(json['payload'])
-            : null);
+      status: json['status'] as String,
+      message: json['message'] as String,
+      payload: json.containsKey('payload') && fromJsonT != null
+          ? fromJsonT(json['payload'])
+          : null,
+    );
   }
 
   factory SuccessResponse.fromJsonWithoutPayload(Map<String, dynamic> json) {
     return SuccessResponse(
-        status: json['status'] as String,
-        message: json['message'] as String,
-        payload: null);
+      status: json['status'] as String,
+      message: json['message'] as String,
+      payload: null,
+    );
   }
 }
 
@@ -62,12 +63,14 @@ class FailResponse {
       status: json['status'] ?? 'fail',
       message: json['message'] ?? 'Unknown error',
       errors: json.containsKey('errors')
-          ? (json['errors'] as List)
-              .fold<Map<String, ValidationErrorResponse>>({}, (acc, error) {
-              final validatonError = ValidationErrorResponse.fromJson(error);
-              acc[validatonError.field] = validatonError;
-              return acc;
-            })
+          ? (json['errors'] as List).fold<Map<String, ValidationErrorResponse>>(
+              {},
+              (acc, error) {
+                final validatonError = ValidationErrorResponse.fromJson(error);
+                acc[validatonError.field] = validatonError;
+                return acc;
+              },
+            )
           : null,
     );
   }
@@ -86,8 +89,9 @@ class ValidationErrorResponse {
 
   factory ValidationErrorResponse.fromJson(Map<String, dynamic> json) {
     return ValidationErrorResponse(
-        message: json['message'] ?? 'No message',
-        rule: json['rule'] ?? 'No rule',
-        field: json['field'] ?? 'No field');
+      message: json['message'] ?? 'No message',
+      rule: json['rule'] ?? 'No rule',
+      field: json['field'] ?? 'No field',
+    );
   }
 }

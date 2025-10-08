@@ -2,7 +2,6 @@ import 'package:asesmen_paud/api/exception.dart';
 import 'package:asesmen_paud/domain/usecases/sign_in_use_case.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:asesmen_paud/api/service/auth_service.dart';
 
 class SignInController extends GetxController {
   final SignInUseCase signInUseCase;
@@ -45,11 +44,11 @@ class SignInController extends GetxController {
     errorMessage('');
 
     try {
-      final signInEntity = await signInUseCase.execute(
+      await signInUseCase.execute(
         emailController.text,
         passwordController.text,
       );
-      await AuthService.saveToken(signInEntity.token);
+
       Get.offAllNamed('/dashboard');
     } on ValidationException catch (e) {
       e.errors.forEach((field, error) {
