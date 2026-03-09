@@ -335,29 +335,28 @@ class EditChecklistPointPageState extends State<EditChecklistPointPage> {
               Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  RadioListTile(
-                    title: const Text('Sudah muncul'),
-                    value: true,
+                  RadioGroup<bool>(
                     groupValue: _hasAppearedSelectedOption,
-                    contentPadding: EdgeInsets.zero,
                     onChanged: (bool? value) {
                       setState(() {
                         _hasAppearedError = null;
                         _hasAppearedSelectedOption = value;
                       });
                     },
-                  ),
-                  RadioListTile(
-                    title: const Text('Belum muncul'),
-                    value: false,
-                    groupValue: _hasAppearedSelectedOption,
-                    contentPadding: EdgeInsets.zero,
-                    onChanged: (bool? value) {
-                      setState(() {
-                        _hasAppearedError = null;
-                        _hasAppearedSelectedOption = value;
-                      });
-                    },
+                    child: Column(
+                      children: [
+                        RadioListTile(
+                          title: const Text('Sudah muncul'),
+                          value: true,
+                          contentPadding: EdgeInsets.zero,
+                        ),
+                        RadioListTile(
+                          title: const Text('Belum muncul'),
+                          value: false,
+                          contentPadding: EdgeInsets.zero,
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),

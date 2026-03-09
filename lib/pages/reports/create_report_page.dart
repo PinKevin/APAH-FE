@@ -97,7 +97,7 @@ class _CreateReportPageState extends State<CreateReportPage> {
                       labelText: 'Pilih bulan',
                       border: OutlineInputBorder(),
                     ),
-                    value: _selectedMonth,
+                    initialValue: _selectedMonth,
                     items: _monthList.map((month) {
                       final monthKey = month.keys.first;
                       final monthValue = month.values.first;
@@ -123,7 +123,7 @@ class _CreateReportPageState extends State<CreateReportPage> {
                       labelText: 'Pilih tahun',
                       border: OutlineInputBorder(),
                     ),
-                    value: _selectedYear,
+                    initialValue: _selectedYear,
                     items: _yearList.map((year) {
                       return DropdownMenuItem(
                           value: year,

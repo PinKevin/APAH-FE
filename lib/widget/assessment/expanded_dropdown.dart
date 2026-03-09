@@ -33,7 +33,7 @@ class ExpandedDropdown<T> extends StatelessWidget {
           borderSide: BorderSide(color: Colors.red),
         ),
       ),
-      value: selectedItem,
+      initialValue: selectedItem,
       items: items.map((item) {
         return DropdownMenuItem(
           value: item,

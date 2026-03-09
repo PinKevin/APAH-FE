@@ -22,7 +22,7 @@ class Dropdown<T> extends StatelessWidget {
           labelText: labelText,
           border: const OutlineInputBorder(),
         ),
-        value: value,
+        initialValue: value,
         items: options.map((option) {
           return DropdownMenuItem<T>(
               value: option,
